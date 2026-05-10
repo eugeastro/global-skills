@@ -1,0 +1,43 @@
+{
+  "name": "document-parser",
+  "version": "v1.1",
+  "description": "Extract structural information (headings, sections, entities, tables, references) from a long document's plain text and return a strict JSON object. Does NOT summarize, interpret, or decode raw PDFs. Trigger when the user asks to parse, structure, extract headings/entities/sections from a document, paper, or report (e.g. \"문서 구조 추출\", \"extract headings\", \"parse this paper\").",
+  "scope": "global",
+  "purpose": "긴 문서(PDF / 보고서 / 논문)의 텍스트를 받아 heading / entity / 섹션 단위로 구조화한다.",
+  "input": {
+    "format": "text",
+    "schema": {
+      "content": "string (문서 본문 텍스트)",
+      "extract": "array<'headings'|'entities'|'sections'|'tables'|'references'> (기본 모두)",
+      "max_depth": "number (heading depth, 기본 3)"
+    }
+  },
+  "output": {
+    "format": "json",
+    "schema": {
+      "headings": "tree {level, text, anchor}",
+      "sections": "array {heading, summary_oneline, char_range}",
+      "entities": "array {type: person|org|date|term, value, mentions: number}",
+      "tables": "array (감지된 표의 위치와 헤더만)",
+      "references": "array (인용 / 참고문헌)"
+    }
+  },
+  "dependencies": [],
+  "boundaries": {
+    "does": [
+      "문서 구조 추출 (heading / 섹션)",
+      "엔터티 / 표 / 참고문헌 위치 식별",
+      "각 섹션 한 줄 요약"
+    ],
+    "does_not": [
+      "전체 문서 요약 (summarizer 영역)",
+      "내용 해석 / 평가",
+      "원본 PDF 디코딩 (텍스트로 입력 받음)"
+    ]
+  },
+  "failure_modes": [
+    "구조 식별 실패 시 빈 배열 반환 + reason 명시",
+    "추측으로 heading 만들지 말 것",
+    "원문에 없는 entity 추가 금지"
+  ]
+}

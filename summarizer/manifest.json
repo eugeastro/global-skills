@@ -1,0 +1,40 @@
+{
+  "name": "summarizer",
+  "version": "v1.1",
+  "description": "Summarize long text (meeting notes, documents, papers) into a fixed TL;DR + Key Points + optional Structure format. Uses ONLY information present in the source — no external knowledge, no interpretation, no fact-checking, no translation. Numbers/proper nouns/dates are kept verbatim. Trigger when the user asks to summarize, condense, \"TL;DR\", or extract key points from a long text (e.g. \"요약해줘\", \"summarize this\", \"핵심만 정리\").",
+  "scope": "global",
+  "purpose": "긴 텍스트(회의록 / 문서 / 논문)를 핵심 구조 중심으로 요약한다.",
+  "input": {
+    "format": "text",
+    "schema": {
+      "content": "string (요약 대상)",
+      "target_length": "short | medium | long (선택, 기본 medium)",
+      "audience": "string (선택, 누구에게 보여줄지)"
+    }
+  },
+  "output": {
+    "format": "markdown",
+    "schema": {
+      "tldr": "1-2 문장",
+      "key_points": "bullet list (3-7개)",
+      "structure": "원문 섹션 매핑 (선택)"
+    }
+  },
+  "dependencies": [],
+  "boundaries": {
+    "does": [
+      "원문에 있는 내용을 압축",
+      "구조화된 bullet 출력",
+      "원문 길이 대비 일정 비율로 축약"
+    ],
+    "does_not": [
+      "원문에 없는 추론 / 해석 추가",
+      "사실 검증 (reasoning-checker 영역)",
+      "번역 (translator 영역)"
+    ]
+  },
+  "failure_modes": [
+    "원문이 너무 짧으면 요약 거부 후 원문 그대로 반환",
+    "원문에 없는 정보를 추가하지 말 것 — hallucination 시 명시적 거부"
+  ]
+}

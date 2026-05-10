@@ -1,0 +1,41 @@
+{
+  "name": "reasoning-checker",
+  "version": "v1.1",
+  "description": "Verify a claim, answer, or chain of reasoning against a source for logical and factual consistency. Outputs a verdict (supported / partially_supported / unsupported / contradicts) with cited evidence and detected logical errors. Does NOT fact-check from external knowledge when no source is provided, rewrite the original answer, or make value/moral judgments. Trigger when the user asks to verify, fact-check, audit reasoning, or check for hallucinations (e.g. \"이 답변 검증해줘\", \"fact-check this\", \"근거 확인\").",
+  "scope": "global",
+  "purpose": "답변 / 주장 / 추론을 검증하여 논리 오류와 hallucination을 탐지한다.",
+  "input": {
+    "format": "text",
+    "schema": {
+      "claim_or_answer": "string (검증 대상)",
+      "source": "string (선택, 원문 / 근거 자료)",
+      "question": "string (선택, 원래 질문)"
+    }
+  },
+  "output": {
+    "format": "markdown",
+    "schema": {
+      "verdict": "supported | partially_supported | unsupported | contradicts",
+      "issues": "발견된 논리 오류 / 사실 오류 리스트",
+      "evidence": "source 안에서 인용 가능한 근거 (있을 때)"
+    }
+  },
+  "dependencies": [],
+  "boundaries": {
+    "does": [
+      "주장이 source에 근거하는지 판정",
+      "논리 비약 / 오류 / 모순 탐지",
+      "hallucination 의심 부분 표기"
+    ],
+    "does_not": [
+      "외부 지식으로 사실 검증 (source 없으면 'source 필요' 명시)",
+      "원답변 다시 작성 / 수정",
+      "도덕·가치 판단"
+    ]
+  },
+  "failure_modes": [
+    "source 없이 절대적 사실 판정 금지",
+    "확신 없으면 partially_supported로 분류",
+    "source에 정보 없음 = unsupported (틀렸다는 뜻 아님)"
+  ]
+}

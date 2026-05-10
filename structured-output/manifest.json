@@ -1,0 +1,37 @@
+{
+  "name": "structured-output",
+  "version": "v1.1",
+  "description": "Convert free-form text into a strict JSON object that conforms to a provided JSON schema. Returns raw JSON only (no code fences, no extra text). Refuses or returns an error object when required fields cannot be extracted; never invents values, never recommends or modifies the schema. Trigger when the user wants to coerce text/LLM output into a fixed JSON schema for stable agent pipelines (e.g. \"이 텍스트를 schema에 맞춰 JSON으로\", \"extract to schema\", \"structured JSON output\").",
+  "scope": "global",
+  "purpose": "주어진 JSON schema 또는 형식 명세에 맞춘 출력을 강제한다. 다른 skill의 출력 안정화에 사용.",
+  "input": {
+    "format": "json",
+    "schema": {
+      "content": "string (변환 대상 텍스트)",
+      "schema": "object (목표 JSON schema)",
+      "strict": "boolean (기본 true, 위반 시 거부)"
+    }
+  },
+  "output": {
+    "format": "json",
+    "schema": "입력으로 받은 schema와 동일"
+  },
+  "dependencies": [],
+  "boundaries": {
+    "does": [
+      "schema 준수 출력 생성",
+      "schema 위반 시 거부",
+      "필드 누락 시 명시적 null / 빈값 처리"
+    ],
+    "does_not": [
+      "schema에 없는 필드 추가",
+      "원본 의미 변경 / 보강",
+      "schema 자체 설계 / 추천"
+    ]
+  },
+  "failure_modes": [
+    "strict=true 인데 변환 불가능하면 에러 객체 반환",
+    "추론으로 빈 필드 채우지 말 것 — 모르면 null",
+    "schema 자체가 잘못되면 schema 자체 문제 명시"
+  ]
+}

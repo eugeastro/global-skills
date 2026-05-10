@@ -1,0 +1,42 @@
+{
+  "name": "translator",
+  "version": "v1.1",
+  "description": "Translate technical or business documents with meaning preservation, keeping original structure (paragraphs, lists, headings), proper nouns, code, command names, and API identifiers verbatim. Maintains a chosen register (formal / neutral / casual) and domain vocabulary consistency. Refuses if target_lang is not given. Does NOT summarize, interpret, or add explanations beyond the source. Trigger when the user asks to translate text or specifies a target language (e.g. \"번역해줘\", \"translate to English\", \"한영 번역\").",
+  "scope": "global",
+  "purpose": "기술 / 비즈니스 문서를 의미 보존 중심으로 자연스럽게 번역한다.",
+  "input": {
+    "format": "text",
+    "schema": {
+      "content": "string (번역 대상)",
+      "source_lang": "string (선택, 자동 감지)",
+      "target_lang": "string (필수)",
+      "register": "formal | neutral | casual (선택, 기본 neutral)",
+      "domain": "string (선택, tech / legal / marketing 등)"
+    }
+  },
+  "output": {
+    "format": "text",
+    "schema": {
+      "translation": "번역문",
+      "notes": "번역 불가 / 모호한 부분 메모 (선택)"
+    }
+  },
+  "dependencies": [],
+  "boundaries": {
+    "does": [
+      "의미 보존 번역",
+      "도메인 용어 일관성 유지",
+      "원문 구조 (단락 / 리스트) 보존"
+    ],
+    "does_not": [
+      "원문 의도 해석 / 의역 과잉",
+      "원문에 없는 설명 추가",
+      "요약 (summarizer 영역)"
+    ]
+  },
+  "failure_modes": [
+    "원문이 모호하면 의역하지 말고 notes에 표기",
+    "고유명사 / 코드 / 명령어는 그대로 유지",
+    "target_lang 명시 안 되면 거부"
+  ]
+}

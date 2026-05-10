@@ -1,0 +1,41 @@
+{
+  "name": "code-review",
+  "version": "v1.1",
+  "description": "Review a code diff or code block for bugs, security issues, performance, and readability. Outputs severity-classified findings (blocker/major/minor/nit) with file:line references and concrete fixes. Does NOT propose architecture changes, module restructuring, or full refactor blueprints. Trigger when the user asks to review a diff, PR, patch, or code block (e.g. \"리뷰해줘\", \"review this code\", \"PR 리뷰\").",
+  "scope": "global",
+  "purpose": "코드 변경에 대한 리뷰 + 리스크 분석 + 구체적 개선안 제시.",
+  "input": {
+    "format": "text",
+    "schema": {
+      "diff_or_code": "string (diff 또는 전체 코드)",
+      "language": "string (선택, 자동 감지 가능)",
+      "context": "string (선택, 변경 의도 / PR 설명)"
+    }
+  },
+  "output": {
+    "format": "markdown",
+    "schema": {
+      "summary": "전체 평가 1-2 문장",
+      "issues": "심각도별 분류된 리스트 (blocker / major / minor / nit)",
+      "suggestions": "구체적 코드 개선안 (file:line 참조 포함)"
+    }
+  },
+  "dependencies": [],
+  "boundaries": {
+    "does": [
+      "버그 / 보안 / 성능 / 가독성 이슈 지적",
+      "코드 레벨 개선 제안",
+      "테스트 누락 / 케이스 누락 지적"
+    ],
+    "does_not": [
+      "아키텍처 / 시스템 설계 변경 제안",
+      "비즈니스 로직 옳고 그름 판정",
+      "전체 리팩토링 청사진 작성"
+    ]
+  },
+  "failure_modes": [
+    "코드가 아닌 입력 → 거부",
+    "diff에 컨텍스트 부족하면 추측하지 말고 '컨텍스트 부족' 명시",
+    "추측성 지적 금지 — 근거 없으면 코멘트 안 함"
+  ]
+}
